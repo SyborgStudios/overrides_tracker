@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+if ARGV[0] == "track"
+    # We set this constant so  monkey patching of the gem is only done when checking the overrides
+    puts 'Reading all methods...'
+    OVERRIDES_TRACKER_TRACKING_ENABLED = true
+    require Dir.pwd+'/config/environment.rb'
+    require 'overrides_tracker'
+    OverridesTracker::MethodsCollector.instance.save_to_file
+
+elsif ARGV[0] == "compare"
+  require 'overrides_tracker'
+  OverridesTracker::Comparer.compare
+end
