@@ -8,6 +8,7 @@ require "overrides_tracker/methods_collector"
 require "overrides_tracker/file_observer"
 require "overrides_tracker/util"
 require "overrides_tracker/comparer"
+require "overrides_tracker/api"
 
 
 module OverridesTracker

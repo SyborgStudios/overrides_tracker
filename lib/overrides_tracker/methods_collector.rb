@@ -6,7 +6,6 @@ class OverridesTracker::MethodsCollector
   @overridden_methods_collection = {}
 
   private_class_method :new
-
   def self.instance
     @instance
   end
@@ -93,7 +92,11 @@ class OverridesTracker::MethodsCollector
     puts '==========='
     puts "Report saved to #{path_to_report_file}."
   end
-  
+
+  def report(api_token)
+    OverridesTracker::Api.report_build(api_token, branch_name_to_report, last_commit_id, last_commit_name_to_report, path_to_report_file)
+  end
+
   private
 
   def methods_collection(class_name)
@@ -117,14 +120,23 @@ class OverridesTracker::MethodsCollector
     branch.downcase.gsub('/','_').gsub(/\s+/, "")
   end
 
+  def branch_name_to_report
+    branch = `git rev-parse --abbrev-ref HEAD`
+    branch.gsub(/\s+/, "")
+  end
+
   def last_commit_id
     commit_id = `git log --format="%H" -n 1`
     commit_id.gsub(/\s+/, "")
   end
 
   def last_commit_name
-    commit_id = `git log --format="%s" -n 1`
-    commit_id.gsub(/\s+/, "")
+    commit_name = `git log --format="%s" -n 1`
+    commit_name.gsub(/\s+/, "")
+  end
+
+  def last_commit_name_to_report
+    commit_name = `git log --format="%s" -n 1`
   end
 
   def path_to_report_file

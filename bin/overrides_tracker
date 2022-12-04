@@ -7,7 +7,34 @@ if ARGV[0] == "track"
     require 'overrides_tracker'
     OverridesTracker::MethodsCollector.instance.save_to_file
 
+    if ENV['OVERRIDES_API_TOKEN']
+      OverridesTracker::MethodsCollector.instance.report(ENV['OVERRIDES_API_TOKEN'])
+    elsif !ARGV[1].nil?
+      OverridesTracker::MethodsCollector.instance.report(ARGV[1])
+    else
+      #puts 'No OVERRIDES_API_TOKEN was set. The report will not be uploaded to overrides.io.'
+      #puts ''
+      #puts 'Have no idea what overrides.io is about? Check it out at https://www.overrides.com'
+    end
+
 elsif ARGV[0] == "compare"
   require 'overrides_tracker'
   OverridesTracker::Comparer.compare
+
+  unless ENV['OVERRIDES_API_TOKEN']
+    puts ''
+    #puts 'Have you heard of overrides.io?'
+    #puts 'It integrates with your CI pipeline and notifies you whenever original methods are changing or disappearing.'
+    #puts 'Check it out at https://www.overrides.com'
+  end  
+elsif ARGV[0] == "report"
+  require 'overrides_tracker'
+
+  if ENV['OVERRIDES_API_TOKEN']
+    OverridesTracker::MethodsCollector.instance.report(ENV['OVERRIDES_API_TOKEN'])
+  elsif !ARGV[1].nil?
+    OverridesTracker::MethodsCollector.instance.report(ARGV[1])
+  else
+    puts 'No OVERRIDES_API_TOKEN was set. The report will not be uploaded to overrides.io.'
+  end
 end
