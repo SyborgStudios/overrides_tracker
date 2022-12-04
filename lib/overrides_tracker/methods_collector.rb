@@ -76,7 +76,8 @@ class OverridesTracker::MethodsCollector
     data = nil
     begin
       File.open(file_path) do |f|
-        data = JSON.parse(f.read)
+        file_data = JSON.parse(f.read)
+        data = file_data['overridden_methods'] != nil ?  file_data['overridden_methods'] : file_data
       end
     rescue
       puts "Error processing #{file_path}"
@@ -85,8 +86,18 @@ class OverridesTracker::MethodsCollector
   end
 
   def save_to_file
+    
+    file_data = {}
+    file_data[:version] = OverridesTracker::VERSION
+    file_data[:branch_name] = branch_name
+    file_data[:branch_name_to_report] = branch_name_to_report
+    file_data[:last_commit_id] = last_commit_id
+    file_data[:last_commit_name] = last_commit_name
+    file_data[:last_commit_name_to_report] = last_commit_name_to_report
+    file_data[:overridden_methods] = @overridden_methods_collection
+
     File.open(path_to_report_file, "w") do |f|
-      f << @overridden_methods_collection.to_json
+      f << file_data.to_json
     end
     puts '  '
     puts '==========='
