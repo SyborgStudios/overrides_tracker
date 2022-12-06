@@ -3,8 +3,8 @@ require 'net/https'
 
 class OverridesTracker::Api
 
-  API_HOST = ENV['OVERRIDES_TRACKER_DEVELOPMENT'] ? "localhost:3000" : "overrides.io"
-  API_PROTOCOL = ENV['OVERRIDES_TRACKER_DEVELOPMENT'] ? "http" : "https"
+  API_HOST = false ? "localhost:3000" : "overrides.io"
+  API_PROTOCOL = false ? "http" : "https"
   API_DOMAIN = "#{API_PROTOCOL}://#{API_HOST}"
 
   API_BASE = "#{API_DOMAIN}/api/v1"

@@ -23,20 +23,6 @@ class OverridesTracker::MethodsCollector
     @methods_collection[class_name][method_type][method_name] = method_hash
   end
 
-
-  def method_is_instance_override?(class_name, method_name)
-    method_is_override?(:instance_methods, class_name, method_name)
-  end
-
-  def method_is_singleton_override?(class_name, method_name)
-    method_is_override?(:singleton_methods, class_name, method_name)
-  end
-
-  def method_is_override?(method_type, class_name, method_name)
-    methods_collection(class_name)
-    @methods_collection[class_name][method_type][method_name].present?
-  end
-
   def mark_method_as_instance_override(class_name, method_name, overriding_method, method_hash)
     mark_method_as_override(:instance_methods, class_name, method_name, overriding_method, method_hash)
   end
@@ -66,6 +52,57 @@ class OverridesTracker::MethodsCollector
     @overridden_methods_collection[class_name][method_type][method_name][:overriding_location] = overriding_method.source_location
   end
 
+  def build_overrides_hash_for_method_type(clazz, class_methods, methods_type, working_directory)
+    methods = []
+    if methods_type == :instance_methods
+      methods = clazz.instance_methods(false)
+    else
+      methods = clazz.singleton_methods(false)
+    end
+
+    methods.each do |method_name|
+      if method_name != nil
+        method_hash = class_methods[methods_type][method_name]
+
+        if methods_type == :instance_methods
+          method_to_check = clazz.instance_method(method_name)
+        else
+          method_to_check = clazz.singleton_method(method_name)
+        end
+
+        method_to_check_hash = OverridesTracker::Util.method_hash(method_to_check)
+      
+        if method_to_check_hash[:location] != nil 
+          if (method_to_check_hash[:location][0].include? working_directory)
+            if method_hash != nil
+              if method_to_check_hash[:location] != method_hash[:location]
+                mark_method_as_override(methods_type, clazz.name, method_name, method_to_check, method_to_check_hash)
+                puts "#{method_name} of class #{clazz.name} was overridden".green
+              end
+            else
+              mark_method_as_added("added_#{methods_type}".to_sym, clazz.name, method_name, method_to_check, method_to_check_hash)
+              puts "#{method_name} of class #{clazz.name} was added".green
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def build_overrides_hash
+    total_classes = @methods_collection.size
+    count = 0
+    working_directory = Dir.pwd
+    @methods_collection.each do |class_name, class_methods|
+      if class_name != nil
+        clazz = class_name.constantize
+        build_overrides_hash_for_method_type(clazz, class_methods, :instance_methods, working_directory)
+        build_overrides_hash_for_method_type(clazz, class_methods, :singleton_methods, working_directory)
+      end
+      count = count+1
+      puts "Processed #{class_name} #{count} / #{total_classes}"
+    end
+  end
 
   def overridden_methods
     @overridden_methods_collection
@@ -115,6 +152,7 @@ class OverridesTracker::MethodsCollector
     @methods_collection[class_name] ||= {}
     @methods_collection[class_name][:instance_methods] ||= {}
     @methods_collection[class_name][:singleton_methods] ||= {}
+    @methods_collection[class_name][:closed] ||= 'no'
   end
 
   def overridden_methods_collection(class_name)

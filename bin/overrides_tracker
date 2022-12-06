@@ -5,6 +5,7 @@ if ARGV[0] == "track"
     OVERRIDES_TRACKER_TRACKING_ENABLED = true
     require Dir.pwd+'/config/environment.rb'
     require 'overrides_tracker'
+    OverridesTracker::MethodsCollector.instance.build_overrides_hash
     OverridesTracker::MethodsCollector.instance.save_to_file
 
     if ENV['OVERRIDES_API_TOKEN']
