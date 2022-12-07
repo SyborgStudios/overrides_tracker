@@ -42,9 +42,11 @@ if defined? OVERRIDES_TRACKER_TRACKING_ENABLED
 
         single_methods = clazz.singleton_methods(false)
         single_methods.each do |single_method|
-          method = clazz.singleton_method(single_method)
-          method_hash = OverridesTracker::Util.method_hash(method)
-          OverridesTracker::MethodsCollector.instance.add_singleton_method_for_class(clazz.name, single_method, method_hash)
+          if single_method != :overrides_tracker_finished_file
+            method = clazz.singleton_method(single_method)
+            method_hash = OverridesTracker::Util.method_hash(method)
+            OverridesTracker::MethodsCollector.instance.add_singleton_method_for_class(clazz.name, single_method, method_hash)
+          end
         end
       end
     end

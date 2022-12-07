@@ -56,34 +56,49 @@ class OverridesTracker::MethodsCollector
     methods = []
     if methods_type == :instance_methods
       methods = clazz.instance_methods(false)
+      clazz.ancestors.each do |ancestor|
+        if ancestor.class == Class
+          break
+        end
+        methods = methods + ancestor.instance_methods(false)
+      end
     else
       methods = clazz.singleton_methods(false)
+      clazz.ancestors.each do |ancestor|
+        if ancestor.class == Class
+          break
+        end
+        methods = methods + ancestor.singleton_methods(false)
+      end
     end
 
     methods.each do |method_name|
-      if method_name != nil
+      if method_name != nil && method_name != :overrides_tracker_finished_file
         method_hash = class_methods[methods_type][method_name]
-
-        if methods_type == :instance_methods
-          method_to_check = clazz.instance_method(method_name)
-        else
-          method_to_check = clazz.singleton_method(method_name)
-        end
-
-        method_to_check_hash = OverridesTracker::Util.method_hash(method_to_check)
-      
-        if method_to_check_hash[:location] != nil 
-          if method_hash != nil
-            if method_to_check_hash[:location] != method_hash[:location]
-              mark_method_as_override(methods_type, clazz.name, method_name, method_to_check, method_to_check_hash)
-              puts "#{method_name} of class #{clazz.name} was overridden".green
-            end
+        begin
+          if methods_type == :instance_methods
+            method_to_check = clazz.instance_method(method_name)
           else
-            #if (method_to_check_hash[:location][0].include? working_directory)
-              mark_method_as_added("added_#{methods_type}".to_sym, clazz.name, method_name, method_to_check, method_to_check_hash)
-              puts "#{method_name} of class #{clazz.name} was added".green
-            #end
+            method_to_check = clazz.singleton_method(method_name)
           end
+
+          method_to_check_hash = OverridesTracker::Util.method_hash(method_to_check)
+        
+          if method_to_check_hash[:location] != nil 
+            if method_hash != nil
+              if method_to_check_hash[:location] != method_hash[:location]
+                mark_method_as_override(methods_type, clazz.name, method_name, method_to_check, method_to_check_hash)
+                puts "#{method_name} of class #{clazz.name} was overridden".green
+              end
+            else
+              if (method_to_check_hash[:location][0].include? working_directory)
+                mark_method_as_added("added_#{methods_type}".to_sym, clazz.name, method_name, method_to_check, method_to_check_hash)
+                puts "#{method_name} of class #{clazz.name} was added".green
+              end
+            end
+          end
+        rescue Exception => e
+          #puts "Error processing #{method_name} of class #{clazz.name}".red
         end
       end
     end
