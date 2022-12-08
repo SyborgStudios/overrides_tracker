@@ -36,6 +36,7 @@ class OverridesTracker::MethodsCollector
     @overridden_methods_collection[class_name][method_type][method_name] = @methods_collection[class_name][method_type][method_name]
     @overridden_methods_collection[class_name][method_type][method_name][:overriding_location] = overriding_method.source_location
     @overridden_methods_collection[class_name][method_type][method_name][:overriding_body] = method_hash[:body]
+    @overridden_methods_collection[class_name][method_type][method_name][:overriding_sha] = method_hash[:sha]
   end
 
   def mark_method_as_added_instance(class_name, method_name, overriding_method, method_hash)
