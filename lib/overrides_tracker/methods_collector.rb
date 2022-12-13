@@ -148,6 +148,7 @@ class OverridesTracker::MethodsCollector
     file_data[:last_commit_name] = last_commit_name
     file_data[:last_commit_name_to_report] = last_commit_name_to_report
     file_data[:working_directory] = Dir.pwd
+    file_data[:bundle_path] = Bundler.bundle_path.to_s
     file_data[:overridden_methods] = @overridden_methods_collection
 
     File.open(path_to_report_file, "w") do |f|
