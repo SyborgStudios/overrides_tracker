@@ -1,35 +1,53 @@
 #!/usr/bin/env ruby
-if ARGV[0] == "track"
-    # We set this constant so  monkey patching of the gem is only done when checking the overrides
+if ARGV[0] == 'track'
+  # We set this constant so  monkey patching of the gem is only done when checking the overrides
+
+  OVERRIDES_TRACKER_TRACKING_ENABLED = true
+  require 'overrides_tracker'
+
+  app_environment_file = Dir.pwd + '/config/environment.rb'
+  if File.exist?(app_environment_file) 
+    #We are in a Rails app
     puts 'Reading all methods...'
-    OVERRIDES_TRACKER_TRACKING_ENABLED = true
-    require Dir.pwd+'/config/environment.rb'
-    require 'overrides_tracker'
+    require  app_environment_file
+  else
+    #We are in a gem
+    puts 'Looking for .overrides_tracker/requierements.rb file for extra requirements...'
+    require 'external/require_all'
+    gem_requirements_file = Dir.pwd + '/.overrides_tracker/requirements.rb'
 
-    OverridesTracker::MethodsCollector.instance.build_overrides_hash
-    OverridesTracker::MethodsCollector.instance.save_to_file
-
-    if ENV['OVERRIDES_API_TOKEN']
-      OverridesTracker::MethodsCollector.instance.report(ENV['OVERRIDES_API_TOKEN'])
-    elsif !ARGV[1].nil?
-      OverridesTracker::MethodsCollector.instance.report(ARGV[1])
+    if File.exist?(gem_requirements_file) 
+      puts 'Reading all methods...'
+      require gem_requirements_file
     else
-      #puts 'No OVERRIDES_API_TOKEN was set. The report will not be uploaded to overrides.io.'
-      #puts ''
-      #puts 'Have no idea what overrides.io is about? Check it out at https://www.overrides.com'
+      puts 'Reading all methods...'
     end
 
-elsif ARGV[0] == "compare"
+   
+    require_all 'lib/**/*.rb', base_dir: Dir.pwd
+    require_all 'app/**/*.rb', base_dir: Dir.pwd
+  end
+  
+  OverridesTracker::MethodsCollector.instance.build_overrides_hash
+  OverridesTracker::MethodsCollector.instance.save_to_file
+
+  if ENV['OVERRIDES_API_TOKEN']
+    OverridesTracker::MethodsCollector.instance.report(ENV['OVERRIDES_API_TOKEN'])
+  elsif !ARGV[1].nil?
+    OverridesTracker::MethodsCollector.instance.report(ARGV[1])
+  end
+
+elsif ARGV[0] == 'compare'
   require 'overrides_tracker'
   OverridesTracker::Comparer.compare
 
   unless ENV['OVERRIDES_API_TOKEN']
     puts ''
-    #puts 'Have you heard of overrides.io?'
-    #puts 'It integrates with your CI pipeline and notifies you whenever original methods are changing or disappearing.'
-    #puts 'Check it out at https://www.overrides.com'
-  end  
-elsif ARGV[0] == "report"
+    # puts 'Have you heard of overrides.io?'
+    # puts 'It integrates with your CI pipeline and notifies you whenever original methods are changing or disappearing.'
+    # puts 'Check it out at https://www.overrides.com'
+  end
+elsif ARGV[0] == 'report'
   require 'overrides_tracker'
 
   if ENV['OVERRIDES_API_TOKEN']

@@ -30,12 +30,10 @@ module OverridesTracker::StringColorizer
   def bold
     "\e[1m#{self}\e[22m"
   end
-  
+
   def italic
-    "\e[3m#{self}\e[23m" 
+    "\e[3m#{self}\e[23m"
   end
-
-
 end
 
 String.prepend(OverridesTracker::StringColorizer)

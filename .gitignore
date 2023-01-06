@@ -1,2 +1,5 @@
 .DS_Store
 *.gem
+
+coverage/*
+.rspec_status

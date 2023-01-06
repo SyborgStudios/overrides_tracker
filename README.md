@@ -1,6 +1,10 @@
 # Overrides Tracker
 Overrides Tracker keeps track of all overriding methods in your project and allows for comparison across branches.
 
+[![Gem Version](https://badge.fury.io/rb/overrides_tracker.svg)](https://badge.fury.io/rb/overrides_tracker)
+[![Coverage Status](https://coveralls.io/repos/github/SyborgStudios/overrides_tracker/badge.svg?branch=master)](https://coveralls.io/github/SyborgStudios/overrides_tracker?branch=master)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/SyborgStudios/overrides_tracker/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/SyborgStudios/overrides_tracker/tree/master)
+
 ## Contact
 
 *Code and Bug Reports*
@@ -118,6 +122,17 @@ Getting started
     15 source method bodies have changed
     ```
     
+## GEM support
+
+Overrides Tracker can also be used on GEMs. It will autoload all classes in the lib and app folders.
+
+Sometimes that is not enough:
+
+If you need further requirements, you can just add a .overrides_tracker folder and add a requirements.rb file to it.
+In that one you can just require the classes your gem depends on. 
+
+You can also use the ['require_all'](https://github.com/jarmo/require_all) way to include complete folders, filter files etc..
+
 ## Ruby version compatibility
 
 OverridesTracker is built in [Continuous Integration] on Ruby 2.3+.

@@ -1,0 +1,134 @@
+{
+   "ClassADifferentSources":{
+      "instance_methods":{
+         "method_one":{
+            "sha":"376988d98a7069f2a2914a4544d4e2d1d519f62b",
+            "overriding_sha":"376988d98a7069f2a2914a4544d4e2d1d519f345",
+            "location":[
+               "/gem/models/class_a.rb",
+               7
+            ],
+            "body":"def method_one\n  master_original_implementation\nend\n",
+            "overriding_location":[
+               "/app/models/class_a.rb",
+               7
+            ],
+            "overriding_body":"def method_one\n  master_override\nend\n"
+         }
+      },
+      "singleton_methods":{
+         "self.method_two":{
+            "sha":"376988d98a7069f2a2914a4544d4e2d1d519f62b",
+            "overriding_sha":"376988d98a7069f2a2914a4544d4e2d1d519f345",
+            "location":[
+               "/gem/models/class_a.rb",
+               7
+            ],
+            "body":"def self.method_two\n  master_original_implementation\nend\n",
+            "overriding_location":[
+               "/app/models/class_a.rb",
+               7
+            ],
+            "overriding_body":"def self.method_two\n  master_override\nend\n"
+         }
+      },
+      "added_instance_methods":{
+         "method_three":{
+            "sha":"376988d98a7069f2a2914a4544d4e2d1d519f62b",
+            "overriding_sha":"376988d98a7069f2a2914a4544d4e2d1d519f345",
+            "location":[
+               "/gem/models/class_a.rb",
+               7
+            ],
+            "body":"def method_three\n  master_original_implementation\nend\n",
+            "overriding_location":[
+               "/app/models/class_a.rb",
+               7
+            ],
+            "overriding_body":"def method_three\n  master_override\nend\n"
+         }
+      },
+      "added_singleton_methods":{
+         "method_four":{
+            "sha":"376988d98a7069f2a2914a4544d4e2d1d519f62b",
+            "overriding_sha":"376988d98a7069f2a2914a4544d4e2d1d519f345",
+            "location":[
+               "/gem/models/class_a.rb",
+               7
+            ],
+            "body":"def method_four\n  master_original_implementation\nend\n",
+            "overriding_location":[
+               "/app/models/class_a.rb",
+               7
+            ],
+            "overriding_body":"def method_four\n  master_override\nend\n"
+         }
+      }
+   },
+   "ClassDifferentOverrides":{
+      "instance_methods":{
+         "method_one":{
+            "sha":"376988d98a7069f2a2914a4544d4e2d1d519f62b",
+            "overriding_sha":"376988d98a7069f2a2914a4544d4e2d1d519f345",
+            "location":[
+               "/gem/models/class_b.rb",
+               7
+            ],
+            "body":"def method_one\n  master_original_implementation\nend\n",
+            "overriding_location":[
+               "/app/models/class_b.rb",
+               7
+            ],
+            "overriding_body":"def method_one\n  master_override\nend\n"
+         }
+      },
+      "singleton_methods":{
+         "self.method_two":{
+            "sha":"376988d98a7069f2a2914a4544d4e2d1d519f62b",
+            "overriding_sha":"376988d98a7069f2a2914a4544d4e2d1d519f345",
+            "location":[
+               "/gem/models/class_b.rb",
+               7
+            ],
+            "body":"def self.method_two\n  master_original_implementation\nend\n",
+            "overriding_location":[
+               "/app/models/class_b.rb",
+               7
+            ],
+            "overriding_body":"def self.method_two\n  master_override\nend\n"
+         }
+      },
+      "added_instance_methods":{
+         "method_three":{
+            "sha":"376988d98a7069f2a2914a4544d4e2d1d519f62b",
+            "overriding_sha":"376988d98a7069f2a2914a4544d4e2d1d519f345",
+            "location":[
+               "/gem/models/class_b.rb",
+               7
+            ],
+            "body":"def method_three\n  master_original_implementation\nend\n",
+            "overriding_location":[
+               "/app/models/class_b.rb",
+               7
+            ],
+            "overriding_body":"def method_three\n  master_override\nend\n"
+         }
+      },
+      "added_singleton_methods":{
+         "method_four":{
+            "sha":"376988d98a7069f2a2914a4544d4e2d1d519f62b",
+            "overriding_sha":"376988d98a7069f2a2914a4544d4e2d1d519f345",
+            "location":[
+               "/gem/models/class_b.rb",
+               7
+            ],
+            "body":"def method_four\n  master_original_implementation\nend\n",
+            "overriding_location":[
+               "/app/models/class_a.rb",
+               7
+            ],
+            "overriding_body":"def method_four\n  master_override\nend\n"
+         }
+      }
+   }
+}
