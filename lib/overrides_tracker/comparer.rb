@@ -111,9 +111,11 @@ class OverridesTracker::Comparer
               if is_source_changed_flag
                 line_differerence_array = []
                 all_methods_collections.each do |build_id, all_methods_hash|
+                  begin
+                    line_differerence_array << method_result_hash[:builds][build_id][:original_body].split(/\n/)
+                  rescue 
 
-                  line_differerence_array << method_result_hash[:builds][build_id][:original_body].split(/\n/)
-                  
+                  end
                   if method_result_hash[:builds][build_id][:result] == 'override_has_changed'
                     numbers[:overrides][:override_changed_count] -= 1
                     numbers[:overrides][:source_changed_count] += 1
@@ -130,11 +132,13 @@ class OverridesTracker::Comparer
               if is_override_changed_flag
                 line_differerence_array = []
                 begin
+                  begin
+                    all_methods_collections.each do |build_id, all_methods_hash|
+                      line_differerence_array << method_result_hash[:builds][build_id][:overriding_body].split(/\n/)
+                    end
+                  rescue
 
-                  all_methods_collections.each do |build_id, all_methods_hash|
-                    line_differerence_array << method_result_hash[:builds][build_id][:overriding_body].split(/\n/)
                   end
-               
                   max_length = line_differerence_array.map(&:length).max
                   transposed_array = line_differerence_array.map{|e| e.values_at(0...max_length)}.transpose
                   method_result_hash[:overriding_mark_lines] = transposed_array.map.with_index{|val, index| val.uniq.size > 1 ? index : nil}.compact

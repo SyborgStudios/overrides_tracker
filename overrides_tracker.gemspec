@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Simon Meyborg']
   spec.email         = ['meyborg@syborgstudios.com']
 
-  spec.summary       = 'Overrides Tracker monitors methods you override for changes and allows for comparison across branches.'
-  spec.description   = 'Overrides Tracker monitors methods you override for changes and allows for comparison across branches.'
+  spec.summary       = 'Overrides Tracker keeps track of all overriding methods and their sources and allows for comparison across branches.'
+  spec.description   = 'Overrides Tracker keeps track of all overriding methods and their sources and allows for comparison across branches.'
   spec.homepage      = 'https://github.com/SyborgStudios/overrides_tracker'
   spec.license       = 'MIT'
 
