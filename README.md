@@ -63,63 +63,90 @@ Getting started
     ```
     ===========================================================================================
 
-    1) BClass#a_instance_method_override: No Changes
+    1) Override: OrdinaryGem::AnotherTypicalClass#a_singleton_method_that_stays_the_same
 
-    ===========================================================================================
+    ...........................................................................................
 
-    2)....
-    .
-    .
-    .
+    main#cc5a31dc4833734a177f01bd161047f8c7909e16.otf
+    -------------------------------------------------------------------------------------------
 
-    ===========================================================================================
+    Original:
 
-    26) YClass#a_singelton_method_override: Changes between files
-
-    in: master#528a0206d8f7cfe08737193659f85e28ccb260eb.otf
-    YClass#a_singelton_method_override:
-
-    Source:
-    def self.a_singelton_method_override
-      does_stuff_one_way
+    def self.a_singleton_method_that_stays_the_same
+      "This is the implementation of a simple singleton method."
+      "This method will stay the same in the next version."
     end
 
-    ../.rbenv/versions/2.3.8/lib/ruby/gems/2.3.0/bundler/gems/some_gem/lib/some_gem/y_class.rb:2
+
+    in BUNDLE_PATH/bundler/gems/ordinary-gem-e67e062189bb/lib/ordinary_gem/another_typical_class.rb:19
+
+
+    -------------------------------------------------------------------------------------------
 
     Override:
-    def self.a_singelton_method_override
-      does_stuff_one_way_but_slitly_different
+
+    def self.a_singleton_method_that_stays_the_same
+      "This is our override of a simple singleton method."
+      "This method should stay the same in the next version."
     end
 
-    /PATH_TO_PROJECT/app/models/decorators/y_class_decorator.rb:13
+
+    in: APP_PATH/app/models/ordinary_gem/another_typical_class_monkey_patch.rb:2
 
 
-    in: upgrade_to_latest#beadcdd8e07a2c9dc2aefddeef04fc42e6fff0d5.otf
-    YClass#a_singelton_method_override:
 
-    Source:
-    def self.a_singelton_method_override
-      does_stuff_in_a_different_way
+    ...........................................................................................
+
+    attached-to-next-version#a7231014c006a4a5848eb4d92bb465eb5c89ee01.otf
+    -------------------------------------------------------------------------------------------
+
+    Original:
+
+    def self.a_singleton_method_that_stays_the_same
+      "This is the implementation of a simple singleton method."
+      "This method will stay the same in the next version."
     end
 
-    ../.rbenv/versions/2.3.8/lib/ruby/gems/2.3.0/bundler/gems/some_gem/lib/some_gem/y_class.rb:2
+
+    in BUNDLE_PATH/bundler/gems/ordinary-gem-f92e5a1a70a6/lib/ordinary_gem/another_typical_class.rb:13
+
+
+    -------------------------------------------------------------------------------------------
 
     Override:
-    def self.a_singelton_method_override
-      does_stuff_one_way_but_slitly_different
+
+    def self.a_singleton_method_that_stays_the_same
+      "This is our override of a simple singleton method."
+      "This method should stay the same in the next version."
     end
 
-    /PATH_TO_PROJECT/app/models/decorators/y_class_decorator.rb:13
 
+    in: APP_PATH/app/models/ordinary_gem/another_typical_class_monkey_patch.rb:2
+
+
+
+    ...........................................................................................
+
+    main#1d279724b26c9491e6e5a01e9711b61a73e9f7e0.otf
+    Method not available
+
+
+
+
+
+    ...........................................................................................
+    .
+    .
+    .
+    .
     ===========================================================================================
 
     Summary:
-    Found 29 distinct overridden methods
-    10 overridden methods have not changed
-    19 overridden methods have changed
-    1 where method is not an override
-    4 where method is not in codebase
-    15 source method bodies have changed
+
+    Investigated methods: 70
+    Diffences on overrides: 42
+    Diffences on added methods: 28
+
     ```
     
 ## GEM support
