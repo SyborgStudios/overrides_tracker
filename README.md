@@ -148,17 +148,6 @@ Getting started
     Diffences on added methods: 28
 
     ```
-    
-## GEM support
-
-Overrides Tracker can also be used on GEMs. It will autoload all classes in the lib and app folders.
-
-Sometimes that is not enough:
-
-If you need further requirements, you can just add a .overrides_tracker folder and add a requirements.rb file to it.
-In that one you can just require the classes your gem depends on. 
-
-You can also use the ['require_all'](https://github.com/jarmo/require_all) way to include complete folders, filter files etc..
 
 ## Overrides.io integration
 <img width="1000" alt="Bildschirm­foto 2023-01-10 um 21 39 42" src="https://user-images.githubusercontent.com/9799974/211657428-c2a7e272-ae86-4c1c-8e77-0a07acc1a4a0.png">
@@ -177,6 +166,17 @@ To push it to overrides.io locally you could also just call 'bundle exec overrid
 You can find a detailed description how to integrate it with CircleCI, GitHub Action and Jenkins here:
 
 https://www.overrides.io/continuous_integration
+
+## GEM support
+
+Overrides Tracker can also be used on GEMs. It will autoload all classes in the lib and app folders.
+
+Sometimes that is not enough:
+
+If you need further requirements, you can just add a .overrides_tracker folder and add a requirements.rb file to it.
+In that one you can just require the classes your gem depends on. 
+
+You can also use the ['require_all'](https://github.com/jarmo/require_all) way to include complete folders, filter files etc..
 
 ## Ruby version compatibility
 
