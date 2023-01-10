@@ -20,7 +20,7 @@ Getting started
     ```ruby
     gem 'overrides_tracker', group: [:test, :development]
     ```
-2. Add `overrides_tracker/*.otf` to your .gitignore file because you do won't to keep hold of your report file when changing branches.
+2. Add `overrides_tracker/*.otf` to your .gitignore file because you want to keep hold of your report file when switching branches.
 
 3. Track you overrides by running:
     ```ruby
@@ -47,7 +47,7 @@ Getting started
     Report saved to /PATH_TO_PROJECT/overrides_tracker/BRANCH_NAME#LAST_COMMIT_ID.otf
     ```
 
-4. This will create a folder called overrides_tracker and creates a file containing all overriding methods of your branch.
+4. This will create a folder called overrides_tracker and a file containing all methods you override as well as your overrides in that branch.
 
 5. Switch branch and follow steps 1-3 again. If you want to compare multiple branches you need to redo these steps for every branch.
 
@@ -133,9 +133,27 @@ In that one you can just require the classes your gem depends on.
 
 You can also use the ['require_all'](https://github.com/jarmo/require_all) way to include complete folders, filter files etc..
 
+## Overrides.io integration
+<img width="1000" alt="Bildschirm­foto 2023-01-10 um 21 39 42" src="https://user-images.githubusercontent.com/9799974/211657428-c2a7e272-ae86-4c1c-8e77-0a07acc1a4a0.png">
+
+Overrides.io is a service that monitors code you override for changes. It notifies you whenever those changes occur.
+Additionally it gives you a beautiful overview of all the methods you have overridden as well as your overrides side by side.
+<p float="left">
+<img width="500" alt="Bildschirm­foto 2023-01-10 um 21 39 15" src="https://user-images.githubusercontent.com/9799974/211658325-60c21057-1a07-4b55-a4d5-3d82470fb3ee.png">
+<img width="500" alt="Bildschirm­foto 2023-01-10 um 21 39 28" src="https://user-images.githubusercontent.com/9799974/211658362-f50435dd-56c5-498b-9038-f702addb0717.png">
+</p>
+Overrides Tracker can easily be integrated into you CI/CD pipeline and configured to send the result files to overrides.io.
+
+You basically just have to set OVERRIDES_API_TOKEN environment variable and call 'bundle exec overrides_tracker track'.
+To push it to overrides.io locally you could also just call 'bundle exec overrides_tracker track YOUR_OVERRIDES_API_TOKEN'.
+
+You can find a detailed description how to integrate it with CircleCI, GitHub Action and Jenkins here:
+
+https://www.overrides.io/continuous_integration
+
 ## Ruby version compatibility
 
-OverridesTracker is built in [Continuous Integration] on Ruby 2.3+.
+Overrides Tracker is built in [Continuous Integration] on Ruby 2.3+.
 
 ## Code of Conduct
 
@@ -152,4 +170,4 @@ Everyone participating in this project's development, issue trackers and other c
 
 ## Copyright
 
-Copyright (c) 2022 Simon Meyborg. See MIT-LICENSE for details.
+Copyright (c) 2023 Simon Meyborg. See MIT-LICENSE for details.
