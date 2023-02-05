@@ -140,6 +140,58 @@ overriding_method.source_location
     data
   end
 
+  def summarize_overrides
+    puts ""
+    puts "==========================================================================================="
+    puts ""
+    puts ""
+    puts "SUMMARY"
+    puts ""
+    @overridden_methods_collection.each do |class_name, class_methods|
+      class_methods[:instance_methods].each do |method_name, method_hash|
+        show_override(class_name, method_name, method_hash, '#', 'overridden')
+      end
+      class_methods[:singleton_methods].each do |method_name, method_hash|
+        show_override(class_name, method_name, method_hash, '.', 'overridden')
+      end
+      class_methods[:added_instance_methods].each do |method_name, method_hash|
+        show_override(class_name, method_name, method_hash, '#', 'added')
+      end
+      class_methods[:added_singleton_methods].each do |method_name, method_hash|      
+        show_override(class_name, method_name, method_hash, '.', 'added')
+      end
+    end
+  end
+
+  def show_override(class_name, method_name, method_hash, separator = '#', word_choice = 'overridden')
+    
+    puts ""
+    puts "==========================================================================================="
+    puts ""
+
+    puts "#{class_name}#{separator}#{method_name} was #{word_choice}."
+    unless method_hash[:body].nil?
+      puts "-------------------------------------------------------------------------------------------".pink
+      puts ''
+      puts 'Original:'.italic
+      puts ''
+      puts "#{method_hash[:body]}".pink
+      puts ''
+      puts "in #{method_hash[:location][0]}:#{method_hash[:location][1]}".italic
+    end
+    puts ''
+    puts ''
+    unless method_hash[:overriding_body].nil?
+      puts "-------------------------------------------------------------------------------------------".blue
+      puts ''
+      puts 'Override:'.italic
+      puts ''
+      puts "#{method_hash[:overriding_body]}".blue
+      puts ''
+      puts "in: #{method_hash[:overriding_location][0]}:#{method_hash[:overriding_location][1]}".italic
+    end
+  end
+
   def save_to_file
     file_data = {}
     file_data[:version] = OverridesTracker::VERSION

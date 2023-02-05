@@ -29,6 +29,7 @@ if ARGV[0] == 'track'
   end
   
   OverridesTracker::MethodsCollector.instance.build_overrides_hash
+  OverridesTracker::MethodsCollector.instance.summarize_overrides
   OverridesTracker::MethodsCollector.instance.save_to_file
 
   if ENV['OVERRIDES_API_TOKEN']
