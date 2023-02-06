@@ -5,7 +5,6 @@ require 'method_source'
 
 require 'overrides_tracker/version'
 require 'overrides_tracker/methods_collector'
-require 'overrides_tracker/file_observer'
 require 'overrides_tracker/string_colorizer'
 require 'overrides_tracker/util'
 require 'overrides_tracker/comparer'
@@ -20,18 +19,18 @@ if defined? OVERRIDES_TRACKER_TRACKING_ENABLED
   Object.class_eval do
     class << self
       def inherited(subclass)
+        puts "Reading...#{subclass.name}"
         subclass.class_eval do
-          def self.overrides_tracker_finished_file
-            clazz = ancestors.first
-            save_methods_of_class(clazz)
+          TracePoint.trace(:end) do |t|
+            if subclass == t.self
+              save_methods_of_class(subclass)
+              t.disable
+            end
           end
         end
-        subclass.extend OverridesTracker::FileObserver
       end
 
       def save_methods_of_class(clazz)
-        puts "Reading...#{clazz.name}"
-
         inst_methods = clazz.instance_methods(false)
         inst_methods.each do |inst_method|
           method = clazz.instance_method(inst_method)

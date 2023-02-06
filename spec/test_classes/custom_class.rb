@@ -26,6 +26,4 @@ class CustomClass
   def self.overrides_tracker_finished_file
     @overrides_tracker_finished_file_called = true
   end
-
-  extend OverridesTracker::FileObserver
 end
