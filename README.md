@@ -22,7 +22,7 @@ Getting started
     ```
 2. Add `overrides_tracker/*.otf` to your .gitignore file because you want to keep hold of your report file when switching branches.
 
-3. Track you overrides by running:
+3. Track your overrides by running:
     ```ruby
     bundle exec overrides_tracker track
     ```
@@ -158,7 +158,7 @@ Additionally it gives you a beautiful overview of all the methods you have overr
 <img width="500" alt="Bildschirm­foto 2023-01-10 um 21 39 15" src="https://user-images.githubusercontent.com/9799974/211658325-60c21057-1a07-4b55-a4d5-3d82470fb3ee.png">
 <img width="500" alt="Bildschirm­foto 2023-01-10 um 21 39 28" src="https://user-images.githubusercontent.com/9799974/211658362-f50435dd-56c5-498b-9038-f702addb0717.png">
 </p>
-Overrides Tracker can easily be integrated into you CI/CD pipeline and configured to send the result files to overrides.io.
+Overrides Tracker can easily be integrated into your CI/CD pipeline and configured to send the result files to overrides.io.
 
 You basically just have to set OVERRIDES_API_TOKEN environment variable and call 'bundle exec overrides_tracker track'.
 To push it to overrides.io locally you could also just call 'bundle exec overrides_tracker track YOUR_OVERRIDES_API_TOKEN'.
