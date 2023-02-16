@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Simon Meyborg']
   spec.email         = ['meyborg@syborgstudios.com']
 
-  spec.summary       = 'Overrides Tracker keeps track of all overriding methods and their sources and allows for comparison across branches.'
-  spec.description   = 'Overrides Tracker keeps track of all overriding methods and their sources and allows for comparison across branches.'
+  spec.summary       = 'Overrides Tracker tracks all monkey patches in your codebase and the methods they override. It allows for comparison between builds to reveal changes you might miss otherwise.'
+  spec.description   = 'Overrides Tracker tracks all monkey patches in your codebase and the methods they override. It allows for comparison between builds to reveal changes you might miss otherwise. Use overrides.io to integrate overrides_tracker into your CI/CD pipeline. That way you will never miss an underlying code-change that might break a monkey patch.'
   spec.homepage      = 'https://github.com/SyborgStudios/overrides_tracker'
   spec.license       = 'MIT'
 
