@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    overrides_tracker (0.2.0)
+    overrides_tracker (0.2.3)
       activesupport
       method_source
 

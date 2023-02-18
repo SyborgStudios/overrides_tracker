@@ -204,7 +204,7 @@ overriding_method.source_location
     file_data[:last_commit_name_to_report] = last_commit_name_to_report
     file_data[:working_directory] = Dir.pwd
     file_data[:bundle_path] = Bundler.bundle_path.to_s
-    file_data[:methods_collection] = @overridden_methods_collection
+    file_data[:methods_collection] = @overridden_methods_collection.sort.to_h
 
     classes_with_overrides = @methods_collection.select do |_key, val|
       !val[:instance_methods].nil? || !val[:singleton_methods].nil?
@@ -232,6 +232,154 @@ overriding_method.source_location
     puts '==========='
     puts "Report saved to #{path_to_report_file}."
   end
+
+  def write_html_report
+    require 'fileutils'
+    source = File.join(Gem::Specification.find_by_name("overrides_tracker").gem_dir(), '/lib/html')
+    target = File.join(Dir.pwd, '/overrides_tracker')
+    FileUtils.copy_entry source, target
+    
+    file_path = File.join(Dir.pwd, "/overrides_tracker/summary.html")
+    html_text = nil
+    begin
+      File.open(file_path) do |f|
+        html_text = f.read
+      end
+    rescue StandardError
+      puts "Error processing #{file_path}"
+    end
+
+    overrides_inside_codebase = ''
+    added_methods_inside_codebase = ''
+    overrides_outside_codebase = ''
+
+    number_of_overrides_inside = 0
+    number_of_overrides_outside = 0
+    number_of_added_methods = 0
+
+    @overridden_methods_collection.sort.to_h.each do |class_name, class_methods|
+      class_methods[:instance_methods].each do |method_name, method_hash|
+        if method_hash[:is_part_of_app] || method_hash[:overriding_is_part_of_app]
+          overrides_inside_codebase += write_override_html(class_name, method_name, method_hash, '#', 'overridden')
+          number_of_overrides_inside+=1
+        else
+          overrides_outside_codebase += write_override_html(class_name, method_name, method_hash, '#', 'overridden')
+          number_of_overrides_outside+=1
+        end
+      end
+      class_methods[:singleton_methods].each do |method_name, method_hash|
+        if method_hash[:is_part_of_app] || method_hash[:overriding_is_part_of_app]
+          overrides_inside_codebase += write_override_html(class_name, method_name, method_hash, '.', 'overridden')
+          number_of_overrides_inside+=1
+        else
+          overrides_outside_codebase += write_override_html(class_name, method_name, method_hash, '.', 'overridden')
+          number_of_overrides_outside+=1
+        end
+      end
+      class_methods[:added_instance_methods].each do |method_name, method_hash|
+        added_methods_inside_codebase += write_override_html(class_name, method_name, method_hash, '#', 'added')
+        number_of_added_methods+=1
+      end
+      class_methods[:added_singleton_methods].each do |method_name, method_hash|      
+        added_methods_inside_codebase += write_override_html(class_name, method_name, method_hash, '.', 'added')
+        number_of_added_methods+=1
+      end
+    end
+
+    html_text.gsub!('<!--DATE-->', DateTime.now.strftime('%d/%m/%Y %H:%M:%S'))
+    html_text.gsub!('<!--BRANCH_NAME-->', branch_name)
+    html_text.gsub!('<!--BRANCH_NAME_TO_REPORT-->', branch_name_to_report)
+    html_text.gsub!('<!--LAST_COMMIT_ID-->', last_commit_id)
+    html_text.gsub!('<!--LAST_COMMIT_NAME-->', last_commit_name)
+   
+    classes_with_overrides = @methods_collection.select do |_key, val|
+      !val[:instance_methods].nil? || !val[:singleton_methods].nil?
+    end
+    classes_with_overrides_transformed = classes_with_overrides.map do |k, v|
+      [k, v[:instance_methods], v[:singleton_methods]]
+    end
+        
+    html_text.gsub!('<!--NUMBER_OF_CLASSES_INVESTIGATED-->', @methods_collection.size.to_s)
+    html_text.gsub!('<!--NUMBER_OF_METHODS_INVESTIGATED-->', classes_with_overrides_transformed.sum { |a| a[1].size + a[2].size }.to_s)
+
+    html_text.gsub!('<!--NUMBER_OF_OVERRIDES_INSIDE-->', number_of_overrides_inside.to_s)
+    html_text.gsub!('<!--NUMBER_OF_ADDED_METHODS-->',  number_of_added_methods.to_s)
+    html_text.gsub!('<!--NUMBER_OF_OVERRIDES_OUTSIDE-->', number_of_overrides_outside.to_s)
+
+    html_text.gsub!('<!--OVERRIDES_INSIDE_CODEBASE-->', overrides_inside_codebase)
+    html_text.gsub!('<!--ADDED_METHODS_INSIDE_CODEBASE-->', added_methods_inside_codebase)
+    html_text.gsub!('<!--OVERRIDES_OUTSIDE_CODEBASE-->', overrides_outside_codebase)
+
+    File.open(file_path, 'w') do |f|
+      f << html_text
+    end
+
+    puts '  '
+    puts '==========='
+    puts "Find your all your overrides here:"
+    puts "#{file_path}"
+  end
+
+  def write_override_html(class_name, method_name, method_hash, separator = '#', word_choice = 'overridden')
+    output ='<div class="col-12">'
+    output +='<h4 class="break-all-words">'
+    output +="#{class_name}#{separator}#{method_name}"
+    output +='</h4>'
+    output +='</div>'
+    output +='<div class="row">'
+    output +='<div class="col-12 col-md-6">'
+    output +='<h6 class="break-all-words">'
+    output +='Original source'
+    output +='</h6>'
+    unless method_hash[:body].nil?
+      output +='<p class="text-break text-muted">'
+      output +="#{method_hash[:location][0]}:#{method_hash[:location][1]}"
+      output +='<button class="btn btn-primary btn-sm clipboard-btn ms-2" data-clipboard-action="copy" data-clipboard-text="'+"#{method_hash[:location][0]}:#{method_hash[:location][1]}"+'" type="button">'
+      output +='<i class="mdi mdi-content-copy"></i>'
+      output +='</button>'
+      output +='</p>'
+      output +='<div id="block">'
+      output +='<pre><code class="codeblock javascript" data-mark-lines="" style="counter-reset: line-numbering 6;">'
+      output += method_hash[:body]
+      output +='</code>'
+      output +='</pre>'
+    else
+      output +='<p class="text-break text-muted">'
+      output +="Not found"
+      output +='</p'
+    end
+    output +='</div>'
+    output +='</div>'
+    output +='<div class="col-12 col-md-6">'
+    output +='<h6>'
+    output +='Override'
+    output +='</h6>'
+    unless method_hash[:overriding_body].nil?
+      output +='<p class="text-break text-muted">'
+      output +="#{method_hash[:overriding_location][0]}:#{method_hash[:overriding_location][1]}"
+      output +='<button class="btn btn-primary btn-sm clipboard-btn ms-2" data-clipboard-action="copy" data-clipboard-text="'+"#{method_hash[:overriding_location][0]}:#{method_hash[:overriding_location][1]}"+'" type="button">'
+      output +='<i class="mdi mdi-content-copy"></i>'
+      output +='</button>'
+      output +='</p>'
+      output +='<div id="block">'
+      output +='<pre><code class="codeblock javascript" data-mark-lines="" style="counter-reset: line-numbering 28;">'
+      output += method_hash[:overriding_body]
+      output +='</code>'
+      output +='</pre>'
+     
+    else
+      output +='<p class="text-break text-muted">'
+      output +="Not found"
+      output +='</p'
+    end      
+    output +='</div>'
+    output +='</div>'
+    output +='</div>'
+    output +='<hr/>'
+
+    return output
+  end
+
 
   def report(api_token)
     OverridesTracker::Api.report_build(api_token, branch_name_to_report, last_commit_id, last_commit_name_to_report, path_to_report_file)

@@ -1,0 +1,173 @@
+<html>
+  
+<head>
+  <title>Overrides</title>
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <link href="./assets/logo/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+  <link href="./assets/logo/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+  <link href="./assets/logo/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+  <link color="#5bbad5" href="./assets/logo/safari-pinned-tab.svg" rel="mask-icon">
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script src="./assets/script.js"></script>
+  <link href="./assets/style.css" rel="stylesheet">
+  <link href="./assets/materialdesignicons.css" rel="stylesheet">
+  <meta content="#da532c" name="msapplication-TileColor">
+  <meta content="#F2D51E" name="theme-color">
+</head>
+
+<body>
+  <div class="navigation">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg d-flex justify-content-between">
+        <div class="ml-3 logo">
+          <a  href="https://www.overrides.io" target="_blank">
+            <img alt="overrides Logo" src="./assets/logo.svg" height="50">
+          </a>
+        </div>
+        <a  href="https://www.overrides.io/continuous_integration" target="_blank" class="btn btn-primary">Integrate Overrides into your CI/CD pipeline</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="content-wrapper" style="min-height: 806px;">
+    <div class="section py-3">
+      <div class="container">
+        <h1>
+          addshtmlreports
+        </h1>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <p>
+              Commit subject:
+              add-html-output/addshtmlreports
+            </p>
+            <p class="text-muted">
+              Date:
+              17/02/2023 15:55:49
+            </p>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h6>
+                  Results:
+                </h6>
+                <p>
+                  <b>
+                    # Overrides:
+                  </b>
+                  2
+                  |
+                  0
+                  <br>
+                  <b>
+                    # Added methods to classes:
+                  </b>
+                  2
+                </p>
+                <hr>
+                <h6>
+                  Investigated:
+                </h6>
+                <p class="text-muted">
+                  <b>
+                    # Classes:
+                  </b>
+                  1
+                  <br>
+                  <b>
+                    # Methods:
+                  </b>
+                  2
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul class="nav nav-tabs mt-5">
+          <li class="nav-item">
+            <a class="nav-link active" type="button" data-bs-toggle="collapse"
+              data-bs-target="#overrides_inside_code_base" aria-expanded="true"
+              aria-controls="panelsStayOpen-collapseOne">
+              Overrides inside codebase
+              (2)
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" type="button" data-bs-toggle="collapse" data-bs-target="#added_methods_inside_code_base"
+              aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+              Added methods inside codebase
+              (2)
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" type="button" data-bs-toggle="collapse" data-bs-target="#overrides_outside_code_base"
+              aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+              Overrides outside codebase
+              (0)
+            </a>
+          </li>
+        </ul>
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="accordion-item">
+            <div id="overrides_inside_code_base" class="accordion-collapse collapse show"
+              aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <div class="pt-5">
+                  <div class="col-12"><h4 class="break-all-words">CustomClass#instance_test_method</h4></div><div class="row"><div class="col-12 col-md-6"><h6 class="break-all-words">Original source</h6><p class="text-break text-muted">/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:10<button class="btn btn-primary btn-sm clipboard-btn ms-2" data-clipboard-action="copy" data-clipboard-text="/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:10" type="button"><i class="mdi mdi-content-copy"></i></button></p><div id="block"><pre><code class="codeblock javascript" data-mark-lines="" style="counter-reset: line-numbering 6;">def instance_test_method
+  'instance_test_method'
+end
+</code></pre></div></div><div class="col-12 col-md-6"><h6>Override</h6><p class="text-break text-muted">/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:10<button class="btn btn-primary btn-sm clipboard-btn ms-2" data-clipboard-action="copy" data-clipboard-text="/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:10" type="button"><i class="mdi mdi-content-copy"></i></button></p><div id="block"><pre><code class="codeblock javascript" data-mark-lines="" style="counter-reset: line-numbering 28;">def instance_test_method
+  'instance_test_method'
+end
+</code></pre></div></div></div><hr/><div class="col-12"><h4 class="break-all-words">CustomClass.singleton_test_method</h4></div><div class="row"><div class="col-12 col-md-6"><h6 class="break-all-words">Original source</h6><p class="text-break text-muted">/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:6<button class="btn btn-primary btn-sm clipboard-btn ms-2" data-clipboard-action="copy" data-clipboard-text="/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:6" type="button"><i class="mdi mdi-content-copy"></i></button></p><div id="block"><pre><code class="codeblock javascript" data-mark-lines="" style="counter-reset: line-numbering 6;">def self.singleton_test_method
+  'singleton_test_method'
+end
+</code></pre></div></div><div class="col-12 col-md-6"><h6>Override</h6><p class="text-break text-muted">/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:6<button class="btn btn-primary btn-sm clipboard-btn ms-2" data-clipboard-action="copy" data-clipboard-text="/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:6" type="button"><i class="mdi mdi-content-copy"></i></button></p><div id="block"><pre><code class="codeblock javascript" data-mark-lines="" style="counter-reset: line-numbering 28;">def self.singleton_test_method
+  'singleton_test_method'
+end
+</code></pre></div></div></div><hr/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <div id="added_methods_inside_code_base" class="accordion-collapse collapse"
+              aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <div class="pt-5">
+                  <div class="col-12"><h4 class="break-all-words">CustomClass#instance_added_test_method</h4></div><div class="row"><div class="col-12 col-md-6"><h6 class="break-all-words">Original source</h6><p class="text-break text-muted">/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:18<button class="btn btn-primary btn-sm clipboard-btn ms-2" data-clipboard-action="copy" data-clipboard-text="/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:18" type="button"><i class="mdi mdi-content-copy"></i></button></p><div id="block"><pre><code class="codeblock javascript" data-mark-lines="" style="counter-reset: line-numbering 6;">def instance_added_test_method
+  'instance_added_test_method'
+end
+</code></pre></div></div><div class="col-12 col-md-6"><h6>Override</h6><p class="text-break text-muted">Not found</p</div></div></div><hr/><div class="col-12"><h4 class="break-all-words">CustomClass.singleton_added_test_method</h4></div><div class="row"><div class="col-12 col-md-6"><h6 class="break-all-words">Original source</h6><p class="text-break text-muted">/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:22<button class="btn btn-primary btn-sm clipboard-btn ms-2" data-clipboard-action="copy" data-clipboard-text="/Users/simonmeyborg/Documents/syborgstudios/projects/overrides_tracker/spec/test_classes/custom_class.rb:22" type="button"><i class="mdi mdi-content-copy"></i></button></p><div id="block"><pre><code class="codeblock javascript" data-mark-lines="" style="counter-reset: line-numbering 6;">def self.singleton_added_test_method
+  'singleton_added_test_method'
+end
+</code></pre></div></div><div class="col-12 col-md-6"><h6>Override</h6><p class="text-break text-muted">Not found</p</div></div></div><hr/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <div id="overrides_outside_code_base" class="accordion-collapse collapse"
+              aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+              <div class="accordion-body">
+                <div class="pt-5">
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

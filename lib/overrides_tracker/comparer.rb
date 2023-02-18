@@ -82,8 +82,7 @@ class OverridesTracker::Comparer
                     method_result_hash[:builds][build_id][:overriding_location] = all_methods_hash[unified_class_name][method_type][unified_method_name]['overriding_location']
                     method_result_hash[:builds][build_id][:overriding_sha] = all_methods_hash[unified_class_name][method_type][unified_method_name]['overriding_sha']
                     method_result_hash[:builds][build_id][:is_part_of_app] = all_methods_hash[unified_class_name][method_type][unified_method_name]['is_part_of_app'] ||  all_methods_hash[unified_class_name][method_type][unified_method_name]['overriding_is_part_of_app'] 
-                    mask_path(method_result_hash[:builds][build_id], working_directories[build_id], bundle_directories[build_id])
-
+       
                     numbers[:overrides][:source_changed_count] += 1
                     is_source_changed_flag = true
                     is_override_changed_flag = false
@@ -96,8 +95,6 @@ class OverridesTracker::Comparer
                     method_result_hash[:builds][build_id][:overriding_location] = all_methods_hash[unified_class_name][method_type][unified_method_name]['overriding_location']
                     method_result_hash[:builds][build_id][:overriding_sha] = all_methods_hash[unified_class_name][method_type][unified_method_name]['overriding_sha']
                     method_result_hash[:builds][build_id][:is_part_of_app] = all_methods_hash[unified_class_name][method_type][unified_method_name]['is_part_of_app'] || all_methods_hash[unified_class_name][method_type][unified_method_name]['overriding_is_part_of_app'] 
-
-                    mask_path(method_result_hash[:builds][build_id], working_directories[build_id], bundle_directories[build_id])
 
                     numbers[:overrides][:override_changed_count] += 1
                     is_override_changed_flag = true
@@ -196,8 +193,6 @@ class OverridesTracker::Comparer
                   method_result_hash[:builds][build_id][:original_location] = all_methods_hash[unified_class_name][method_type][unified_method_name]['location']
                   method_result_hash[:builds][build_id][:is_part_of_app] = all_methods_hash[unified_class_name][method_type][unified_method_name]['is_part_of_app'] ||  all_methods_hash[unified_class_name][method_type][unified_method_name]['overriding_is_part_of_app'] 
 
-                  mask_path(method_result_hash[:builds][build_id], working_directories[build_id], bundle_directories[build_id])
-
                   numbers[:added_methods][:source_changed_count] += 1
                   is_added_source_has_changed_flag = true
                 elsif all_methods_hash[unified_class_name][method_type][unified_method_name].nil?
@@ -240,18 +235,6 @@ class OverridesTracker::Comparer
     {results: {override_results: results, added_method_results: added_method_results}, numbers: numbers}
   end
 
-  def self.mask_path(build_hash, working_directory, bundle_directory)
-    if build_hash[:original_location]
-      build_hash[:original_location][0].gsub!(working_directory, 'APP_PATH')
-      build_hash[:original_location][0].gsub!(bundle_directory, 'BUNDLE_PATH')
-    end
-
-    if build_hash[:overriding_location]
-      build_hash[:overriding_location][0].gsub!(working_directory, 'APP_PATH')
-      build_hash[:overriding_location][0].gsub!(bundle_directory, 'BUNDLE_PATH')
-    end
-  end
-
   def self.compare
     all_methods_collections = {}
     unified_methods_collections = {}
@@ -261,6 +244,8 @@ class OverridesTracker::Comparer
     all_methods_collections = {}
     unified_methods_collections = {}
     report_files = Dir.entries(DO_BASE_DIR) - [".", ".."]
+    number_of_builds = 0
+    
     report_files.each do |file_name|
       if file_name[-4..-1] == '.otf'
         all_methods_collections[file_name] = {}
@@ -271,12 +256,13 @@ class OverridesTracker::Comparer
         working_directories[file_name] = result_file_data['working_directory']
         bundle_directories[file_name] = result_file_data['bundle_path']
         unified_methods_collections = unified_methods_collections.deep_merge(methods_collection)
+        number_of_builds += 1
       end
     end
 
     comparison = compare_builds(unified_methods_collections, all_methods_collections, working_directories, bundle_directories)
-    methods_count = 0
 
+    methods_count = 0
     comparison[:results].each do |result_type, result_array|
       result_array.each do |method_hash|
         if method_hash[:builds] != {}
@@ -346,8 +332,140 @@ class OverridesTracker::Comparer
     puts "Diffences on overrides: #{comparison[:numbers][:overrides][:total]/2}"
     puts "Diffences on added methods: #{comparison[:numbers][:added_methods][:total]/2}"
 
+    write_html_report(comparison, number_of_builds, all_methods_collections)
+
     comparison
   end
 
+  def self.write_html_report(comparison, number_of_builds, all_methods_collections)
+    require 'fileutils'
+    source = File.join(Gem::Specification.find_by_name("overrides_tracker").gem_dir(), '/lib/html')
+    target = File.join(Dir.pwd, '/overrides_tracker')
+    FileUtils.copy_entry source, target
+
+    methods_count = 0
+
+    file_path = File.join(Dir.pwd, "/overrides_tracker/compare.html")
+    html_text = nil
+    begin
+      File.open(file_path) do |f|
+        html_text = f.read
+      end
+    rescue StandardError
+      puts "Error processing #{file_path}"
+    end
+
+    column_size = 12/number_of_builds
+    
+    head = ''
+    all_methods_collections.each do |file_name, methods_collection|
+      head += '<div class="col-12 col-md-'+column_size.to_s+' pe-3">'
+      head += '<h6 class="text-dark">' + file_name + '</h6>'
+      head += '</div>'
+    end
+
+    html_text.gsub!('<!--FILENAMES-->', head)
+
+    overrides_in_app_path_methods_hash = comparison[:results][:override_results].select{ |mh| mh[:is_part_of_app] == true  }
+    overrides_outside_app_path_methods_hash = comparison[:results][:override_results].select{ |mh| mh[:is_part_of_app] == false }
+    added_methods_hash = comparison[:results][:added_method_results].select{ |mh| mh[:builds].any?}
+
+    html_text.gsub!('<!--OVERRIDES_INSIDE_CODEBASE-->', write_comparison_html(overrides_in_app_path_methods_hash, column_size))
+    html_text.gsub!('<!--ADDED_METHODS_INSIDE_CODEBASE-->', write_comparison_html(added_methods_hash, column_size))
+    html_text.gsub!('<!--OVERRIDES_OUTSIDE_CODEBASE-->', write_comparison_html(overrides_outside_app_path_methods_hash, column_size))
+
+    html_text.gsub!('<!--NUMBER_OF_OVERRIDES_INSIDE-->', overrides_in_app_path_methods_hash.count.to_s)
+    html_text.gsub!('<!--NUMBER_OF_ADDED_METHODS-->', added_methods_hash.count.to_s)
+    html_text.gsub!('<!--NUMBER_OF_OVERRIDES_OUTSIDE-->', overrides_outside_app_path_methods_hash.count.to_s)
+
+    File.open(file_path, 'w') do |f|
+      f << html_text
+    end
+
+    puts '==========='
+    puts "Find your comparison here:"
+    puts "#{file_path}"
+  end
+
+  def self.write_comparison_html(methods_hash, column_size)
+    puts methods_hash.first.to_s
+    output=''
+    if methods_hash.any?
+      methods_hash.each do |method_hash|
+        if method_hash[:builds].present?
+          output+='<h4 class="break-all-words">'
+          if method_hash[:method_type].include?('instance')
+            output+= "#{method_hash[:class_name]}##{method_hash[:method_name]}"
+          else
+            output+= "#{method_hash[:class_name]}.#{method_hash[:method_name]}"
+          end
+          output+='</h4>'
+          
+          output+='<div class="row">'
+          method_hash[:builds].each do |build_id, build_result|
+            output+='<div class="col-12 col-md-'+column_size.to_s+'">'
+            if build_result[:result] != 'source_has_changed'
+              output+= "#{build_result[:result]}"
+            end
+            output+='</div>'
+          end
+          output+='</div>'
+
+          output+='<div class="row">'
+          method_hash[:builds].each do |build_id, build_result|
+            output+='<div class="col-12 col-md-'+column_size.to_s+'">'
+            unless build_result[:original_body].nil?
+              output+='<h6>'
+              output+= 'Original source'
+              output+='</h6>'
+              output+= html_code_block(build_result[:original_body], build_result[:original_location][1], build_result[:original_location][0], method_hash[:mark_lines])
+            end
+            output+='</div>'
+          end
+          output+='</div>'
+
+          output+='<div class="row">'
+          method_hash[:builds].each do |build_id, build_result|
+            output+='<div class="col-12 col-md-'+column_size.to_s+'">'
+            unless build_result[:overriding_body].nil?
+              output+='<h6>'
+              output+= 'Override'
+              output+='</h6>'
+              output+= html_code_block(build_result[:overriding_body], build_result[:overriding_location][1], build_result[:overriding_location][0], method_hash[:overriding_mark_lines])
+            end
+            output+='</div>'
+          end
+          output+='</div>'
+          output+='<hr>'
+        end
+      end
+    else 
+      output+='<p>'
+      output+= 'No differences'
+      output+='</p>'
+    end
+    output 
+  end
+
+  def self.html_code_block(code, starting_line, location, mark_lines = nil)
+    output = ''
+    output += "<p class='text-break text-muted'>#{location}:#{starting_line}"
+    output += '<button class="btn btn-primary btn-sm clipboard-btn ms-2" type="button" data-clipboard-action="copy" data-clipboard-text="' + location + ':' + starting_line.to_s + '">'
+    output += '<i class="mdi mdi-content-copy"></i>'
+    output += '</button>'
+    output += '</p>'
+    output += '<div id="block">'
+    output += '<pre>'
+    if mark_lines == nil 
+      output += '<code class="codeblock javascript" style="counter-reset: line-numbering ' + (starting_line-1).to_s + ';" data-mark-lines="">'
+    else
+      output += '<code class="marked_block javascript" style="counter-reset: line-numbering ' + (starting_line-1).to_s + ';" data-mark-lines="' + mark_lines.to_s + '">'
+    end
+    output += code
+    output += '</code>'
+    output += '</pre>'
+    output += '</div>'
+    output
+  end
 end
 
