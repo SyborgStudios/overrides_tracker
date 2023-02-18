@@ -362,4 +362,31 @@ describe OverridesTracker::MethodsCollector do
     end
   end
 
+  describe '#write_html_report' do
+    let(:instance_method) { CustomClass.instance_method(:instance_test_method) }
+    let(:singleton_method) { CustomClass.singleton_method(:singleton_test_method) }
+    let(:added_instance_method) { CustomClass.instance_method(:instance_added_test_method) }
+    let(:added_singleton_method) { CustomClass.singleton_method(:singleton_added_test_method) }
+
+    before do
+      obj.instance_variable_set(:@methods_collection, nil)
+      obj.instance_variable_set(:@overridden_methods_collection, nil)
+      obj.add_method_for_class(:singleton_methods, 'CustomClass', :singleton_test_method, OverridesTracker::Util.method_hash(singleton_method))
+      obj.add_method_for_class(:instance_methods, 'CustomClass', :instance_test_method, OverridesTracker::Util.method_hash(instance_method))
+      obj.mark_method_as_override(:singleton_methods, 'CustomClass', :singleton_test_method, singleton_method, OverridesTracker::Util.method_hash(singleton_method))
+      obj.mark_method_as_override(:instance_methods, 'CustomClass', :instance_test_method, instance_method,  OverridesTracker::Util.method_hash(instance_method))
+      obj.mark_method_as_added(:added_singleton_methods, 'CustomClass', :singleton_added_test_method, added_singleton_method, OverridesTracker::Util.method_hash(added_singleton_method))
+      obj.mark_method_as_added(:added_instance_methods, 'CustomClass', :instance_added_test_method, added_instance_method, OverridesTracker::Util.method_hash(added_instance_method))
+    end
+
+    it 'calls write_override_html for each overridden method' do
+      expect(obj).to receive(:write_override_html).with('CustomClass', :instance_test_method, {:sha=>"3408e1f1736c6b83bc13f014e5338eec0c67393f", :location=>["#{WORKING_DIR}/spec/test_classes/custom_class.rb", 10], :body=>"def instance_test_method\n  'instance_test_method'\nend\n", :is_part_of_app=>true, :overriding_location=>["#{WORKING_DIR}/spec/test_classes/custom_class.rb", 10], :overriding_body=>"def instance_test_method\n  'instance_test_method'\nend\n", :overriding_sha=>"3408e1f1736c6b83bc13f014e5338eec0c67393f", :overriding_is_part_of_app=>true},'#', 'overridden').once.and_call_original
+      expect(obj).to receive(:write_override_html).with('CustomClass', :singleton_test_method, {:sha=>"1e331d1bb802e5d0a21a6c18f574f6ceecb4bc91", :location=>["#{WORKING_DIR}/spec/test_classes/custom_class.rb", 6], :body=>"def self.singleton_test_method\n  'singleton_test_method'\nend\n", :is_part_of_app=>true, :overriding_location=>["#{WORKING_DIR}/spec/test_classes/custom_class.rb", 6], :overriding_body=>"def self.singleton_test_method\n  'singleton_test_method'\nend\n", :overriding_sha=>"1e331d1bb802e5d0a21a6c18f574f6ceecb4bc91", :overriding_is_part_of_app=>true},'.', 'overridden').once.and_call_original
+      expect(obj).to receive(:write_override_html).with('CustomClass', :instance_added_test_method, {:sha=>"5d7709e9d44e9f718cca1876a4fdec82bbe3cf4e", :location=>["#{WORKING_DIR}/spec/test_classes/custom_class.rb", 18], :body=>"def instance_added_test_method\n  'instance_added_test_method'\nend\n", :is_part_of_app=>true, :overriding_location=>["#{WORKING_DIR}/spec/test_classes/custom_class.rb", 18], :overriding_is_part_of_app=>true},'#', 'added').once.and_call_original
+      expect(obj).to receive(:write_override_html).with('CustomClass', :singleton_added_test_method, {:sha=>"ba6efb2d378551e55ee53660d25b266b3c515da3", :location=>["#{WORKING_DIR}/spec/test_classes/custom_class.rb", 22], :body=>"def self.singleton_added_test_method\n  'singleton_added_test_method'\nend\n", :is_part_of_app=>true, :overriding_location=>["#{WORKING_DIR}/spec/test_classes/custom_class.rb", 22], :overriding_is_part_of_app=>true},'.', 'added').once.and_call_original
+      
+      obj.write_html_report
+
+    end 
+  end
 end

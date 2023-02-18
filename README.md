@@ -20,32 +20,19 @@ Getting started
     ```ruby
     gem 'overrides_tracker', group: [:test, :development]
     ```
-2. Add `overrides_tracker/*.otf` to your .gitignore file because you want to keep hold of your report file when switching branches.
+2. Add `overrides_tracker/*` to your .gitignore file because you want to keep hold of your report file when switching branches.
 
 3. Track your overrides by running:
     ```ruby
     bundle exec overrides_tracker track
     ```
     
-    The output will look like this.
+    This will print out all overrides on the terminal as well as generate a nice and clean HTML summary.
+    That summary can be found under overrides_tracker/summary.html and will look somewhat like this:
     
-    ```
-    Reading all methods...
-    Checking...AClass
-    Checking...BClass
-    Method is a new instance method: AClass#a_new_method
-    Method is instance override: AClass#a_instance_method_override
-    .
-    .
-    .
-    Checking...YClass
-    Method is a new singleton method: YClass#a_new_method
-    Method is singleton override: YClass#a_singelton_method_override
-    Checking...ZClass
-
-    ===========
-    Report saved to /PATH_TO_PROJECT/overrides_tracker/BRANCH_NAME#LAST_COMMIT_ID.otf
-    ```
+<p float="left">
+<img width="800" alt="" src="https://user-images.githubusercontent.com/9799974/219690881-40c44093-70d1-4326-aa7b-8196b2f1742b.png">
+</p>
 
 4. This will create a folder called overrides_tracker and a file containing all methods you override as well as your overrides in that branch.
 
@@ -58,105 +45,20 @@ Getting started
     bundle exec overrides_tracker compare
     ````
 
-8. The result gives you an overview on what has changed and what not.
+8. The result will be printed on the terminal as well as written as nice and clean HTML.
+   That comparison can be found under overrides_tracker/compare.html and will look somewhat like this:
 
-    ```
-    ===========================================================================================
+<p float="left">
+<img width="800" alt="" src="https://user-images.githubusercontent.com/9799974/219691633-b270db0f-8587-4b2b-91b7-8aecc36501dc.png">
+</p>
 
-    1) Override: OrdinaryGem::AnotherTypicalClass#a_singleton_method_that_stays_the_same
-
-    ...........................................................................................
-
-    main#cc5a31dc4833734a177f01bd161047f8c7909e16.otf
-    -------------------------------------------------------------------------------------------
-
-    Original:
-
-    def self.a_singleton_method_that_stays_the_same
-      "This is the implementation of a simple singleton method."
-      "This method will stay the same in the next version."
-    end
-
-
-    in BUNDLE_PATH/bundler/gems/ordinary-gem-e67e062189bb/lib/ordinary_gem/another_typical_class.rb:19
-
-
-    -------------------------------------------------------------------------------------------
-
-    Override:
-
-    def self.a_singleton_method_that_stays_the_same
-      "This is our override of a simple singleton method."
-      "This method should stay the same in the next version."
-    end
-
-
-    in: APP_PATH/app/models/ordinary_gem/another_typical_class_monkey_patch.rb:2
-
-
-
-    ...........................................................................................
-
-    attached-to-next-version#a7231014c006a4a5848eb4d92bb465eb5c89ee01.otf
-    -------------------------------------------------------------------------------------------
-
-    Original:
-
-    def self.a_singleton_method_that_stays_the_same
-      "This is the implementation of a simple singleton method."
-      "This method will stay the same in the next version."
-    end
-
-
-    in BUNDLE_PATH/bundler/gems/ordinary-gem-f92e5a1a70a6/lib/ordinary_gem/another_typical_class.rb:13
-
-
-    -------------------------------------------------------------------------------------------
-
-    Override:
-
-    def self.a_singleton_method_that_stays_the_same
-      "This is our override of a simple singleton method."
-      "This method should stay the same in the next version."
-    end
-
-
-    in: APP_PATH/app/models/ordinary_gem/another_typical_class_monkey_patch.rb:2
-
-
-
-    ...........................................................................................
-
-    main#1d279724b26c9491e6e5a01e9711b61a73e9f7e0.otf
-    Method not available
-
-
-
-
-
-    ...........................................................................................
-    .
-    .
-    .
-    .
-    ===========================================================================================
-
-    Summary:
-
-    Investigated methods: 70
-    Diffences on overrides: 42
-    Diffences on added methods: 28
-
-    ```
-
-## Overrides.io integration
-<img width="1000" alt="Bildschirm­foto 2023-01-10 um 21 39 42" src="https://user-images.githubusercontent.com/9799974/211657428-c2a7e272-ae86-4c1c-8e77-0a07acc1a4a0.png">
+## Integrate Overrides Tracker into your CI/CD pipeline with Overrides.io
 
 Overrides.io is a service that monitors code you override for changes. It notifies you whenever those changes occur.
 Additionally it gives you a beautiful overview of all the methods you have overridden as well as your overrides side by side.
 <p float="left">
-<img width="500" alt="Bildschirm­foto 2023-01-10 um 21 39 15" src="https://user-images.githubusercontent.com/9799974/211658325-60c21057-1a07-4b55-a4d5-3d82470fb3ee.png">
-<img width="500" alt="Bildschirm­foto 2023-01-10 um 21 39 28" src="https://user-images.githubusercontent.com/9799974/211658362-f50435dd-56c5-498b-9038-f702addb0717.png">
+<img width="500" alt="" src="https://user-images.githubusercontent.com/9799974/211658325-60c21057-1a07-4b55-a4d5-3d82470fb3ee.png">
+<img width="500" alt="" src="https://user-images.githubusercontent.com/9799974/211658362-f50435dd-56c5-498b-9038-f702addb0717.png">
 </p>
 Overrides Tracker can easily be integrated into your CI/CD pipeline and configured to send the result files to overrides.io.
 

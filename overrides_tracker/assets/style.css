@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "RedHatText";
+  src: url("fonts/RedHatText-VariableFont_wght.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+body{
+  background-color: #212529 !important;
+}
+h1,h2,h3,h4,h5,h6{
+  font-family: "RedHatText" !important;
+  font-weight: 400;
+  color: #ffffff !important;
+}
+p{
+  color: #ffffff !important;
+}
+code{
+  color: #ffffff !important;
+}
+.text-muted{
+  color: #888888 !important;
+}
+pre{
+  border: 1px solid #F2D51E !important;
+  padding: 5px;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: #343a40 !important;
+}
+.card{
+  background-color: #343a40 !important;
+  border: 1px solid #F2D51E !important;
+  border-radius: 0px !important;
+}
+pre code .line::before {
+  content: counter(line-numbering);
+  counter-increment: line-numbering;
+  padding-right: .8em; /* space after numbers */
+  margin-right: 5px;
+  width: 1.5em;
+  text-align: right;
+  opacity: 1;
+  color: #F2D51E;
+  /*background-color:$yellow;*/
+}
+.logo{
+  height: 80px;
+  padding-top: 15px;
+
+}
+hr{
+  color:#ffffff;
+}
+.accordion, .accordion-item, .accordion-button, .accordion-collapse, .accordion-body{
+  background-color: #212529 !important;
+  transition: none;
+}
+.accordion-body{
+  background-color: #212529 !important;
+  padding: 0 !important;
+}
+.nav-tabs {
+  --bs-nav-tabs-border-width: 1px;
+  --bs-nav-tabs-border-color: #dee2e6;
+  --bs-nav-tabs-border-radius: 0 !important;
+  --bs-nav-tabs-link-hover-border-color: #F2D51E;
+  --bs-nav-tabs-link-active-color: #F2D51E;
+  --bs-nav-tabs-link-active-bg: #212529;
+  --bs-nav-tabs-link-active-border-color: #dee2e6 #dee2e6 #212529;
+  border-bottom: var(--bs-nav-tabs-border-width) solid var(--bs-nav-tabs-border-color);
+}
+.nav-link{
+  color: #ffffff !important;
+}
+.nav-link.active{
+  color: #F2D51E !important;
+}
+.nav-link:hover{
+  color: #F2D51E !important;
+}
+.bg-yellow{
+  background-color: #F2D51E;
+}
+.text-dark{
+  color: #212529 !important;
+  word-break: break-word;
+}
+.mark{
+  background-color: #6c757d !important;
+  width: 100%;
+  display: inline-block;
+}
+.scrollbox{
+  height:100%;
+  overflow-y: scroll;
+  overflow-x: hidden
+}
+.navbar{
+  color: #ffffff !important;
+}
