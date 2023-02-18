@@ -38,7 +38,7 @@ Getting started
 
 5. Switch branch and follow steps 1-3 again. If you want to compare multiple branches you need to redo these steps for every branch.
 
-6. Now you have at least 2 files in the overrides_tracker folder
+6. Now you have at least 2 otf-files in the overrides_tracker folder
 
 7. It's time to compare these overrides accross branches.
     ```ruby
@@ -57,13 +57,16 @@ Getting started
 Overrides.io is a service that monitors code you override for changes. It notifies you whenever those changes occur.
 Additionally it gives you a beautiful overview of all the methods you have overridden as well as your overrides side by side.
 <p float="left">
-<img width="500" alt="" src="https://user-images.githubusercontent.com/9799974/211658325-60c21057-1a07-4b55-a4d5-3d82470fb3ee.png">
-<img width="500" alt="" src="https://user-images.githubusercontent.com/9799974/211658362-f50435dd-56c5-498b-9038-f702addb0717.png">
+<img width="500" alt="Project View" src="https://user-images.githubusercontent.com/9799974/211658325-60c21057-1a07-4b55-a4d5-3d82470fb3ee.png">
+<img width="500" alt="Build View" src="https://user-images.githubusercontent.com/9799974/211658362-f50435dd-56c5-498b-9038-f702addb0717.png">
+<img width="500" alt="Comparison View" src="https://user-images.githubusercontent.com/9799974/219853892-988d8c81-01ba-4d95-a335-cd9ceeddcf67.png">
 </p>
-Overrides Tracker can easily be integrated into your CI/CD pipeline and configured to send the result files to overrides.io.
 
-You basically just have to set OVERRIDES_API_TOKEN environment variable and call 'bundle exec overrides_tracker track'.
-To push it to overrides.io locally you could also just call 'bundle exec overrides_tracker track YOUR_OVERRIDES_API_TOKEN'.
+Overrides Tracker can easily be integrated into your CI/CD pipeline.   
+Just sign up at Overrides.io and setup your project within a view seconds and you will receive an OVERRIDES_API_TOKEN. 
+
+Now just set OVERRIDES_API_TOKEN environment variable with the value of that token and call 'bundle exec overrides_tracker track'.
+To push the result file to overrides.io manually you could also just call 'bundle exec overrides_tracker track YOUR_OVERRIDES_API_TOKEN'.
 
 You can find a detailed description how to integrate it with CircleCI, GitHub Action and Jenkins here:
 
