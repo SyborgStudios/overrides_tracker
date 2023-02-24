@@ -1,5 +1,5 @@
 # Overrides Tracker
-Overrides Tracker keeps track of all overriding methods in your project and allows for comparison across branches.
+Overrides Tracker keeps track of all overriding methods and their originals inside and outside of your codebase and allows for comparison across branches.
 
 [![Gem Version](https://badge.fury.io/rb/overrides_tracker.svg)](https://badge.fury.io/rb/overrides_tracker)
 [![Coverage Status](https://coveralls.io/repos/github/SyborgStudios/overrides_tracker/badge.svg?branch=master)](https://coveralls.io/github/SyborgStudios/overrides_tracker?branch=master)
