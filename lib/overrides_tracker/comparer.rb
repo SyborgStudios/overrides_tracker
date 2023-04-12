@@ -392,7 +392,7 @@ class OverridesTracker::Comparer
     output=''
     if methods_hash.any?
       methods_hash.each do |method_hash|
-        if method_hash[:builds].present?
+        if method_hash[:builds] != nil
           output+='<h4 class="break-all-words">'
           if method_hash[:method_type].include?('instance')
             output+= "#{method_hash[:class_name]}##{method_hash[:method_name]}"

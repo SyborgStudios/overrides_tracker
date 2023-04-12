@@ -96,7 +96,7 @@ module RequireAll
     files.map { |file_| File.expand_path file_ }.sort.each do |file_|
       begin
         __require(options[:method], file_)
-      rescue NameError => e
+      rescue 
         # Only wrap NameError exceptions for uninitialized constants
         #raise e unless e.instance_of?(NameError) && e.message.include?('uninitialized constant')
         #raise LoadError, "Could not require #{file_} (#{e}). Please require the necessary files"
@@ -205,7 +205,10 @@ module RequireAll
   private
 
   def __require(method, file)
-    Kernel.send(method, file)
+    begin
+      Kernel.send(method, file)
+    rescue LoadError => e
+    end
   end
 
   def __autoload(file, full_path, options)
